@@ -1,6 +1,7 @@
 [package]
-name = "creaturae"
+name = "cotn"
 version = "0.1.0"
 authors = ["Miles Granger <miles59923@gmail.com>"]
 
 [dependencies]
+tensorflow = "0.10.0"

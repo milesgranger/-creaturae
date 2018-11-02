@@ -1,7 +1,7 @@
-extern crate creaturae;
+extern crate cotn;
 
 
-use creaturae::prelude::*;
+use cotn::prelude::*;
 
 
 #[test]

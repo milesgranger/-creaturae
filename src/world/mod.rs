@@ -1,4 +1,4 @@
-//! Contains different implementations of [`Population`] behaviors.
+//! Contains different implementations of [`World`] behaviors.
 //! 
 //! 
 

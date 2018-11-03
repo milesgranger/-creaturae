@@ -2,4 +2,4 @@
 
 pub use brains::*;
 pub use creature::*;
-pub use population::*;
+pub use world::*;

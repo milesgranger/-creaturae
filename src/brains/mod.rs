@@ -3,12 +3,14 @@
 //! 
 //! 
 
+use std::f32::consts::E as Eulers;
 use rayon::prelude::*;
 use num::pow::Pow;
 use rand::{self, Rng, thread_rng, distributions::Uniform};
 
+
 pub fn sigmoid(x: f32) -> f32 {
-    1. / (1_f32.pow(-x))
+    1. / (1_f32 + Eulers.pow(-x))
 }
 
 
@@ -46,8 +48,8 @@ impl<F> Brain for Simpleton<F>
     fn evolve(&mut self) {
         let mut rng = rand::thread_rng();
         let rand_idx: usize = rng.gen_range(0, self.state.len());
-        let rand_flt: f32   = rng.gen_range(-1_f32, 1_f32);
-        self.state[rand_idx] *= rand_flt;
+        let rand_flt: f32   = rng.gen_range(-0.1, 0.1);
+        self.state[rand_idx] += rand_flt;
     }
     fn predict_proba(&self, x: &Vec<Vec<f32>>) -> Vec<f32> {
         x
@@ -55,7 +57,7 @@ impl<F> Brain for Simpleton<F>
         .map(|rec| {
             rec.iter()
                 .zip(self.state.iter())
-                .map(|(e, s)| *e * *s)
+                .map(|(e, s)| e + s)
                 .sum::<f32>()
         })
         .map(|s| (self.func)(s))

@@ -39,7 +39,7 @@ impl<'a, F, B> World<'a, F, B>
         where C: Fn() -> Creature<B>
     {
         let n_population = 100;
-        let n_generations = 10000;
+        let n_generations = 200;
         World {
             eval_x,
             eval_y,
@@ -57,7 +57,7 @@ impl<'a, F, B> World<'a, F, B>
         let mut rng = thread_rng();
 
         print!("\n");
-        let _ = (0..self.n_generations)
+        let _ = (0..self.n_generations + 1)
             .map(|i| {
                 
                 // Evolve the population
@@ -80,8 +80,8 @@ impl<'a, F, B> World<'a, F, B>
                     .collect::<Vec<f32>>();
 
                 // Output the total error in this population
-                let sum: f32 = sum_errors.iter().sum::<f32>() / sum_errors.len() as f32;
-                print!("\rGenration: {} -- Sum error: {}", i, sum);
+                let avg: f32 = sum_errors.iter().sum::<f32>() / sum_errors.len() as f32;
+                print!("\rGenration: {} -- Sum error: {}", i, avg);
 
                 // Do population selection
                 // TODO: Best implementation -> Now select best 25% and then 
@@ -105,10 +105,11 @@ impl<'a, F, B> World<'a, F, B>
                     .map(|(idx, error)| {
                         if *error > val {
                             let parent_idx: usize = rng.gen_range(0, best_of_population_idxs.len());
+                            let parent_idx = best_of_population_idxs[parent_idx];
                             let new_brain = self.population[parent_idx].brain.clone();
                             self.population[idx].set_brain(new_brain);
+                            self.population[idx].evolve()
                         }
-                        self.population[idx].evolve()
                     })
                     .collect::<Vec<()>>();
             })
@@ -119,7 +120,7 @@ impl<'a, F, B> World<'a, F, B>
 
 
 fn find_75th_quantile_value<T: Copy + PartialOrd>(mut v: Vec<T>) -> T {
-    v.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    v.sort_by(|a, b| b.partial_cmp(a).unwrap());
     let middle: usize = v.len() / 2;
     let slice = &v[middle..];
     slice[slice.len() / 2]

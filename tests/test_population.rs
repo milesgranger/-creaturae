@@ -22,10 +22,13 @@ fn test_init_world() {
         Creature::new(Simpleton::new(4, sigmoid))
     };
 
-    let world = World::new(
+    let mut world = World::new(
         &eval_x,
         &eval_y,
         eval_func,
         creature_factory
     );
+
+    world.run();
+
 }

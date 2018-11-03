@@ -5,10 +5,11 @@ use prelude::*;
 
 
 /// The [`Creature`]
+#[derive(Clone)]
 pub struct Creature<B>
     where B: Brain
 {
-    brain: B
+    pub brain: B
 }
 
 
@@ -23,9 +24,8 @@ impl<B> Creature<B>
     }
 
     /// Set the [`Brain`] of this creature.
-    pub fn set_brain(mut self, brain: B) -> Self {
+    pub fn set_brain(&mut self, brain: B) {
         self.brain = brain;
-        self
     }
 
     /// Evolve the features of the creature

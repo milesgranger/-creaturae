@@ -12,34 +12,35 @@ type Evaly = Vec<f32>;
 
 
 /// The [`World`] in which [`Creature`]s live
-pub struct World<'a, F, B> 
+pub struct World<'a, F, T>
     where 
         F: (Fn(f32, f32) -> f32) + Sync,
-        B: Brain
+        T: Creature
 {
     eval_x: &'a Evalx,
     eval_y: &'a Evaly,
     eval_func: F,
     n_generations: u32,
     n_population: u32,
-    population: Vec<Creature<B>>
+    population: Vec<T>
 }
 
-impl<'a, F, B> World<'a, F, B>
+impl<'a, F, T> World<'a, F, T>
     where 
         F: (Fn(f32, f32) -> f32) + Sync,
-        B: Brain + Clone
+        T: Creature
 {
 
     /// Create a new World
-    pub fn new<C>(eval_x: &'a Evalx, 
+    pub fn new<C>(eval_x: &'a Evalx,
                   eval_y: &'a Evaly, 
                   eval_func: F, 
                   creature_factory: C) -> Self 
-        where C: Fn() -> Creature<B>
+        where
+            C: Fn() -> T
     {
-        let n_population = 100;
-        let n_generations = 200;
+        let n_population = 50;
+        let n_generations = 100;
         World {
             eval_x,
             eval_y,
@@ -48,7 +49,7 @@ impl<'a, F, B> World<'a, F, B>
             n_population,
             population: (0..n_population)
                 .map(|_| creature_factory())
-                .collect::<Vec<Creature<B>>>()
+                .collect::<Vec<T>>()
         }
     }
 
@@ -104,11 +105,13 @@ impl<'a, F, B> World<'a, F, B>
                     .enumerate()
                     .map(|(idx, error)| {
                         if *error > val {
+
+                            // Replace this creature with a random mutation form a random selection of the best
                             let parent_idx: usize = rng.gen_range(0, best_of_population_idxs.len());
                             let parent_idx = best_of_population_idxs[parent_idx];
-                            let new_brain = self.population[parent_idx].brain.clone();
-                            self.population[idx].set_brain(new_brain);
-                            self.population[idx].evolve()
+                            let mut creature = self.population[parent_idx].clone();
+                            creature.evolve();
+                            self.population[idx] = creature;
                         }
                     })
                     .collect::<Vec<()>>();

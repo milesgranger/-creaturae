@@ -6,13 +6,13 @@ use cotn::prelude::*;
 
 #[test]
 fn test_init_creature() {
-    let mut creature = Creature::new(Simpleton::new(10, sigmoid));
+    let mut creature = Simpleton::new(10, sigmoid);
     creature.evolve();
 }
 
 #[test]
 fn test_predict_proba() {
-    let creature = Creature::new(Simpleton::new(5, sigmoid));
+    let creature = Simpleton::new(5, sigmoid);
 
     let x = vec![
         vec![1_f32, 2., -3., -40., 5.],

@@ -10,6 +10,5 @@ extern crate rayon;
 extern crate ndarray;
 
 pub mod creature;
-pub mod brains;
 pub mod world;
 pub mod prelude;

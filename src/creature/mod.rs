@@ -20,6 +20,8 @@ pub trait Creature: Clone {
     fn predict_proba(&self, &Vec<Vec<f32>>) -> Vec<f32>;
 }
 
+
+
 #[derive(Clone)]
 pub struct Simpleton<F>
     where F: Fn(f32) -> f32 + Sync + Clone

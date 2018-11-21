@@ -34,13 +34,13 @@ impl<'a, F, T> World<'a, F, T>
     /// Create a new World
     pub fn new<C>(eval_x: &'a Evalx,
                   eval_y: &'a Evaly, 
-                  eval_func: F, 
+                  eval_func: F,
+                  n_generations: u32,
+                  n_population: u32,
                   creature_factory: C) -> Self 
         where
             C: Fn() -> T
     {
-        let n_population = 50;
-        let n_generations = 100;
         World {
             eval_x,
             eval_y,
